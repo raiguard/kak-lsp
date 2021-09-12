@@ -180,7 +180,7 @@ pub fn editor_diagnostics(meta: EditorMeta, ctx: &mut Context) {
                 .map(|x| {
                     let p = get_kakoune_position(filename, &x.range.start, ctx).unwrap();
                     format!(
-                        "{}:{}:{}: {}:{}",
+                        "{}:{}:{}: {}: {}",
                         short_file_path(filename, &ctx.root_path),
                         p.line,
                         p.column,
