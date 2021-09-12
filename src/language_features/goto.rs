@@ -68,11 +68,14 @@ pub fn goto_locations(meta: EditorMeta, locations: &[Location], ctx: &mut Contex
                         return "".into();
                     }
                     format!(
-                        "{}:{}:{}:{}",
+                        "{}:{}:{}: {}",
                         short_file_path(path_str, &ctx.root_path),
                         pos.line,
                         pos.column,
-                        contents.line(range.start.line as usize),
+                        contents
+                            .line(range.start.line as usize)
+                            .to_string()
+                            .trim_start()
                     )
                 })
                 .join("")
