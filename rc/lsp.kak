@@ -110,6 +110,7 @@ declare-option -docstring "Number of warnings" int lsp_diagnostic_warning_count 
 
 # Internal variables.
 
+declare-option -hidden str-list lsp_loli_locations
 declare-option -hidden completions lsp_completions
 declare-option -hidden range-specs lsp_errors
 declare-option -hidden line-specs lsp_error_lines 0 '0| '

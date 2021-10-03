@@ -178,9 +178,10 @@ pub fn editor_diagnostics(meta: EditorMeta, ctx: &mut Context) {
             diagnostics
                 .iter()
                 .map(|x| {
+                    // TODO: Use an actual range instead for better matching
                     let p = get_kakoune_position(filename, &x.range.start, ctx).unwrap();
                     format!(
-                        "{}:{}:{}: {}:{}",
+                        "'{0}|{1}.{2},{1}.{2}|{3}: {4}'",
                         short_file_path(filename, &ctx.root_path),
                         p.line,
                         p.column,
@@ -195,11 +196,11 @@ pub fn editor_diagnostics(meta: EditorMeta, ctx: &mut Context) {
                 })
                 .collect::<Vec<_>>()
         })
-        .join("\n");
-    let command = format!(
-        "lsp-show-diagnostics {} {}",
-        editor_quote(&ctx.root_path),
-        editor_quote(&content),
-    );
-    ctx.exec(meta, command);
+        .join(" ");
+    debug!("{}", content);
+    let command = format!("set-option global lsp_loli_locations {}", content);
+    // TODO: This is bad
+    ctx.exec(meta.clone(), command);
+    ctx.exec(meta.clone(), "gnew lsp_loli_locations");
+    ctx.exec(meta, "gopen");
 }
