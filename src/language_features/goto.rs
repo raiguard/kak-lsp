@@ -68,22 +68,23 @@ pub fn goto_locations(meta: EditorMeta, locations: &[Location], ctx: &mut Contex
                         return "".into();
                     }
                     format!(
-                        "{}:{}:{}:{}",
+                        "'{0}|{1}.{2},{1}.{2}|{3}'",
                         short_file_path(path_str, &ctx.root_path),
                         pos.line,
                         pos.column,
-                        contents.line(range.start.line as usize),
+                        contents.line(range.start.line as usize).to_string().trim(),
                     )
                 })
-                .join("")
+                .sorted()
+                .join(" ")
         })
-        .join("");
-    let command = format!(
-        "lsp-show-goto-choices {} {}",
-        editor_quote(&ctx.root_path),
-        editor_quote(&select_location),
-    );
-    ctx.exec(meta, command);
+        .sorted()
+        .join(" ");
+    // TODO: Cloning is bad!
+    let command = format!("set-option global lsp_loli_locations {}", select_location);
+    ctx.exec(meta.clone(), command);
+    ctx.exec(meta.clone(), "gnew lsp_loli_locations");
+    ctx.exec(meta, "gopen");
 }
 
 pub fn text_document_definition(meta: EditorMeta, params: EditorParams, ctx: &mut Context) {
