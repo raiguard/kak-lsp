@@ -194,13 +194,17 @@ pub fn editor_diagnostics(meta: EditorMeta, ctx: &mut Context) {
                         x.message
                     )
                 })
+                .sorted()
                 .collect::<Vec<_>>()
         })
+        .sorted()
         .join(" ");
     debug!("{}", content);
-    let command = format!("set-option global lsp_loli_locations {}", content);
-    // TODO: This is bad
-    ctx.exec(meta.clone(), command);
+    // TODO: Cloning is bad
+    ctx.exec(
+        meta.clone(),
+        format!("set-option global lsp_loli_locations {}", content),
+    );
     ctx.exec(meta.clone(), "gnew lsp_loli_locations");
     ctx.exec(meta, "gopen");
 }
