@@ -199,7 +199,6 @@ pub fn editor_diagnostics(meta: EditorMeta, ctx: &mut Context) {
         })
         .sorted()
         .join(" ");
-    debug!("{}", content);
     // TODO: Cloning is bad
     ctx.exec(
         meta.clone(),
